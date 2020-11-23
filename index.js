@@ -1,5 +1,5 @@
 const Discord = require("discord.js");
-const { prefix, token, mongoDbUri } = require("./config.json");
+// const { prefix, token, mongoDbUri } = require("./config.json");
 const { MongoLib } = require("./common/mongoDb");
 const ytdl = require("ytdl-core");
 
@@ -7,7 +7,7 @@ const client = new Discord.Client();
 
 const queue = new Map();
 
-MongoLib.connect(process.env.mongodbUri||mongoDbUri).then(async () => {
+MongoLib.connect(process.env.mongodbUri).then(async () => {
   execute = async (message, serverQueue) => {
     const args = message.content.split(" ");
     const voiceChannel = message.member.voice.channel;
@@ -250,10 +250,10 @@ MongoLib.connect(process.env.mongodbUri||mongoDbUri).then(async () => {
     );
   };
 
-  client.login(token);
+  client.login(process.env.token);
   client.on("message", async (message) => {
     if (message.author.bot) return;
-    if (!message.content.startsWith(prefix)) return;
+    if (!message.content.startsWith(process.env.prefix)) return;
 
     const factoryObject = (message, serverQueue) => ({
       [">create-playlist"]: () => createPlaylist(message),
