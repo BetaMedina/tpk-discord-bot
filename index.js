@@ -1,13 +1,12 @@
 const Discord = require("discord.js");
+const ytdl = require("ytdl-core");
 // const { prefix, token, mongoDbUri } = require("./config.json");
 const { MongoLib } = require("./common/mongoDb");
-const ytdl = require("ytdl-core");
 
 const client = new Discord.Client();
-
 const queue = new Map();
 
-MongoLib.connect(process.env.mongodbUri).then(async () => {
+MongoLib.connect(process.env.mongoDbUri).then(async () => {
   execute = async (message, serverQueue) => {
     const args = message.content.split(" ");
     const voiceChannel = message.member.voice.channel;
@@ -251,25 +250,30 @@ MongoLib.connect(process.env.mongodbUri).then(async () => {
   };
 
   client.login(process.env.token);
-  client.on("message", async (message) => {
-    if (message.author.bot) return;
-    if (!message.content.startsWith(process.env.prefix)) return;
 
-    const factoryObject = (message, serverQueue) => ({
-      [">create-playlist"]: () => createPlaylist(message),
-      [">play"]: () => execute(message, serverQueue),
-      [">run-playlist"]: () => runPlaylist(message, serverQueue),
-      [">add-song"]: () => addSong(message, serverQueue),
-      [">volume"]: () => volume(message, serverQueue),
-      [">skip"]: () => skip(message, serverQueue),
-      [">clear"]: () => clear(serverQueue),
-      [">list"]: () => listPlaylist(message, serverQueue),
-      [">delete-playlist"]: () => listPlaylist(message),
-      [">exit"]: () => exit(serverQueue),
-    });
+  client.on('ready',()=>{
+    console.log('Bot online')
+  })
+
+  // client.on("message", async (message) => {
+  //   if (message.author.bot) return;
+  //   if (!message.content.startsWith(process.env.prefix)) return;
+
+  //   const factoryObject = (message, serverQueue) => ({
+  //     [">create-playlist"]: () => createPlaylist(message),
+  //     [">play"]: () => execute(message, serverQueue),
+  //     [">run-playlist"]: () => runPlaylist(message, serverQueue),
+  //     [">add-song"]: () => addSong(message, serverQueue),
+  //     [">volume"]: () => volume(message, serverQueue),
+  //     [">skip"]: () => skip(message, serverQueue),
+  //     [">clear"]: () => clear(serverQueue),
+  //     [">list"]: () => listPlaylist(message, serverQueue),
+  //     [">delete-playlist"]: () => listPlaylist(message),
+  //     [">exit"]: () => exit(serverQueue),
+  //   });
     
-    const messagePrefix = message.content.split(" ");
-    const serverQueue = queue.get(message.guild.id);
-    await factoryObject(message, serverQueue)[messagePrefix[0]]();
-  });
+  //   const messagePrefix = message.content.split(" ");
+  //   const serverQueue = queue.get(message.guild.id);
+  //   await factoryObject(message, serverQueue)[messagePrefix[0]]();
+  // });
 });
