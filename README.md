@@ -8,7 +8,7 @@ Este maravilhoso bot feito em 4 horas utiliza a lib ytdl para tocar as musicas e
 
 # Instalação
 
-Você tem um servidor no discor? Não? ... TA ESPERANDO O QUE PRA CRIAR?
+Você tem um servidor no discord? Não? ... TA ESPERANDO O QUE PRA CRIAR?
 
 Beleza... se você chegou até aqui, é porque você criou seu servidor ( graças a deus ), bom... a partir de agora, basta clicar neste maravilhoso link que acabei de gerar:
 
