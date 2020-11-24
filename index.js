@@ -254,10 +254,9 @@ MongoLib.connect(process.env.mongoDbUri).then(async () => {
     if (message.author.bot) return;
     if (!message.content.startsWith(process.env.prefix)) return;
 
-    !message.member.voice.channel &&
-      message.channel.send(
-        "Você precisa estar em um canal de voz para usar esse comando"
-      );
+    if(!message.member.voice.channel) return message.channel.send(
+      "Você precisa estar em um canal de voz para usar esse comando"
+    );
 
     const factoryObject = (message, serverQueue) => ({
       [">create-playlist"]: () => createPlaylist(message),
