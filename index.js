@@ -217,6 +217,11 @@ MongoLib.connect(process.env.mongoDbUri).then(async () => {
     await playlistCollection.find({ userId: user }).forEach((item) => {
       songs.push(item.playlistName);
     });
+    if(!songs.length){
+      return message.channel.send(
+        `Você não possui playlists criadas...`
+      );
+    }
     const playlistNames = songs.join(", ");
     return message.channel.send(
       `Suas playlists atuais são: **${playlistNames}**`
