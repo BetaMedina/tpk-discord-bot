@@ -267,7 +267,7 @@ MongoLib.connect(process.env.mongoDbUri).then(async () => {
       [">skip"]: () => skip(message, serverQueue),
       [">clear"]: () => clear(serverQueue),
       [">list"]: () => listPlaylist(message, serverQueue),
-      [">delete-playlist"]: () => listPlaylist(message),
+      [">delete-playlist"]: () => deletePlaylist(message),
       [">exit"]: () => exit(serverQueue),
     });
 
