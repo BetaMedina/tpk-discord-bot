@@ -11,11 +11,6 @@ MongoLib.connect(process.env.mongoDbUri).then(async () => {
     const args = message.content.split(" ");
     const voiceChannel = message.member.voice.channel;
 
-    if (!voiceChannel)
-      return message.channel.send(
-        "Você precisa estar em um canal de voz para usar esse comando"
-      );
-
     const songInfo = await ytdl.getInfo(args[1]);
     const song = {
       title: songInfo.videoDetails.title,
@@ -251,13 +246,18 @@ MongoLib.connect(process.env.mongoDbUri).then(async () => {
 
   client.login(process.env.token);
 
-  client.on('ready',()=>{
-    console.log('Bot online')
-  })
+  client.on("ready", () => {
+    console.log("Bot online");
+  });
 
   client.on("message", async (message) => {
     if (message.author.bot) return;
     if (!message.content.startsWith(process.env.prefix)) return;
+
+    !message.member.voice.channel &&
+      message.channel.send(
+        "Você precisa estar em um canal de voz para usar esse comando"
+      );
 
     const factoryObject = (message, serverQueue) => ({
       [">create-playlist"]: () => createPlaylist(message),
@@ -271,7 +271,7 @@ MongoLib.connect(process.env.mongoDbUri).then(async () => {
       [">delete-playlist"]: () => listPlaylist(message),
       [">exit"]: () => exit(serverQueue),
     });
-    
+
     const messagePrefix = message.content.split(" ");
     const serverQueue = queue.get(message.guild.id);
     await factoryObject(message, serverQueue)[messagePrefix[0]]();
